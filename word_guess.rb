@@ -1,17 +1,33 @@
+require 'csv'
+require 'pry'
+
 class WordGuess
   def initialize(debug = false)
     # are we in debug mode?
     @debug = debug
 
+    @words = {}
+    CSV.open("words.csv", 'r').each do |word_list|
+      level_letter = word_list.shift
+      case level_letter
+      when "e"
+        @words["e"] = word_list
+      when "m"
+        @words["m"] = word_list
+      when "h"
+        @words["h"] = word_list
+      end
+    end
+
     # possible words, selected at random
-    @words = {
-      "e" => %w(dog cat bug hat cap lit kin fan fin fun tan ten tin ton),
-      "m" => %w(plain claim brine crime alive bride skine drive slime stein jumpy),
-      "h" => %w(
-          machiavellian prestidigitation plenipotentiary quattuordecillion
-          magnanimous unencumbered bioluminescent circumlocution
-        )
-    }
+    # @words = {
+    #   "e" => %w(dog cat bug hat cap lit kin fan fin fun tan ten tin ton),
+    #   "m" => %w(plain claim brine crime alive bride skine drive slime stein jumpy),
+    #   "h" => %w(
+    #       machiavellian prestidigitation plenipotentiary quattuordecillion
+    #       magnanimous unencumbered bioluminescent circumlocution
+    #     )
+    # }
 
     # players attempts allowed by difficulty
     @tries = {
@@ -126,7 +142,6 @@ class WordGuess
       print "\nPlease guess a letter! (a..z): "
       letter = gets.chomp.downcase
     end
-
     letter
   end
 end
